@@ -76,3 +76,29 @@ def generate_llm_response(question, insights):
             "response": f"Error generating response: {str(e)}",
             "cached": False
         }
+
+def stream_llm_response(question, insights):
+
+    prompt = build_prompt(question, insights)
+
+    stream = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are a data analyst assistant."
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        stream=True
+    )
+
+    for chunk in stream:
+
+        delta = chunk.choices[0].delta.content
+
+        if delta:
+            yield delta

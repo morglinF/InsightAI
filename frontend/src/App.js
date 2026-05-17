@@ -1,20 +1,27 @@
-import { useEffect, useState } from "react";
-import api from "./api/client";
+import { Toaster } from "react-hot-toast";
+
+import ChatPage from "./pages/ChatPage";
+import { DatasetProvider } from "./context/DatasetContext";
 
 function App() {
-  const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    api.get("/")
-      .then(res => setMessage(res.data.message))
-      .catch(err => console.log(err));
-  }, []);
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>InsightAI</h1>
-      <p>{message}</p>
-    </div>
+    <>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: "#172033",
+            color: "#fff",
+            border: "1px solid rgba(255,255,255,0.08)",
+          },
+        }}
+      />
+
+      <DatasetProvider>
+  <ChatPage />
+</DatasetProvider>
+    </>
   );
 }
 

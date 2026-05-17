@@ -3,45 +3,39 @@ import os
 import shutil
 import uuid
 
+from app.services.file_registry import DATASETS
+
 router = APIRouter()
 
 UPLOAD_DIR = "app/data"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
-
-# simple in-memory registry (we improve later)
-DATASETS = {}
 
 
 @router.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
 
     file_id = str(uuid.uuid4())
-    file_path = os.path.join(UPLOAD_DIR, file.filename)
 
-    ALLOWED_TYPES = ["csv", "pdf", "txt"]
-    
-    # detect file type
-    file_extension = file.filename.split(".")[-1]
+    file_extension = file.filename.split(".")[-1].lower()
 
-    if file_extension not in ALLOWED_TYPES:
-        return {"error": "Unsupported file type"}
+    stored_filename = f"{file_id}.{file_extension}"
+
+    file_path = os.path.join(UPLOAD_DIR, stored_filename)
 
     # save file
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    file_extension = file.filename.split(".")[-1].lower()
-
-    # register dataset
+    # store metadata
     DATASETS[file_id] = {
-        "file_name": file.filename,
+        "file_id": file_id,
+        "original_name": file.filename,
+        "stored_name": stored_filename,
         "file_path": file_path,
         "file_type": file_extension
     }
 
     return {
-        "message": "File uploaded successfully",
-        "file_id": file_id,
-        "file_name": file.filename,
-        "file_type": file_extension
+        "message": "Upload successful",
+        "file": DATASETS[file_id]
     }
