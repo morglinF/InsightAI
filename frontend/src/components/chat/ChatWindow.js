@@ -5,7 +5,8 @@ import AnalyticsPanel from "../analytics/AnalyticsPanel";
 
 export default function ChatWindow({
   messages,
-  loading
+  loading,
+  aiInsight
 }) {
 
   if (messages.length === 0) {
@@ -32,12 +33,9 @@ export default function ChatWindow({
 
       ))} 
 
-      {loading && <TypingIndicator />}
-      {messages.length > 0 && !loading && (
-  <div className="mt-10">
-    <AnalyticsPanel />
-  </div>
-)}
+   <div className="mt-10">
+  <AnalyticsPanel aiInsight={aiInsight} />
+</div>
 
     </div>
   );

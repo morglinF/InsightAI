@@ -42,12 +42,12 @@ export default function Sidebar() {
         }
       );
 
-      const uploadedDataset = res.data.file;
+      const uploadedDataset = res.data;
 
       setDatasets((prev) => [
-        ...prev,
+        ...prev.filter(Boolean),
         uploadedDataset,
-      ]);
+]);
 
       setActiveDataset(uploadedDataset);
 
@@ -128,7 +128,7 @@ export default function Sidebar() {
         {datasets.map((dataset) => (
 
           <div
-            key={dataset.file_id}
+            key={dataset?.file_id}
             onClick={() =>
               setActiveDataset(dataset)
             }
@@ -143,7 +143,7 @@ export default function Sidebar() {
               transition-all
 
               ${
-                activeDataset?.file_id === dataset.file_id
+                activeDataset?.file_id === dataset?.file_id
                   ? "bg-primary/20 border border-primary"
                   : "bg-surface hover:bg-slate-800"
               }

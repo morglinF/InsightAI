@@ -5,6 +5,12 @@ from app.routes.chat import router as chat_router
 
 app = FastAPI(title="InsightAI")
 
+from app.database import Base, engine
+from app.models.dataset import Dataset
+from app.models.insight import Insight
+
+Base.metadata.create_all(bind=engine)
+
 
 app.add_middleware(
     CORSMiddleware,

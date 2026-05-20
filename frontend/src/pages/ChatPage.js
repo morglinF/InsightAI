@@ -17,6 +17,8 @@ export default function ChatPage() {
   
   const { activeDataset } = useDatasets();
 
+  const [aiInsight, setAiInsight] = useState("");
+
  const sendMessage = async () => {
 
   if (!input || !activeDataset) return;
@@ -29,6 +31,8 @@ export default function ChatPage() {
   setMessages((prev) => [...prev, userMessage]);
 
   setLoading(true);
+  
+  
 
   let aiMessage = {
     role: "ai",
@@ -47,11 +51,12 @@ export default function ChatPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          file_id: activeDataset.file_id,
+          file_id: activeDataset?.file_id,
           question: input,
         }),
       }
     );
+    
 
     const reader = response.body.getReader();
 
@@ -60,6 +65,21 @@ export default function ChatPage() {
     let done = false;
 
     while (!done) {
+
+      try {
+
+    const insightRes = await fetch(
+      `http://localhost:8000/latest-insight/${activeDataset.file_id}`
+    );
+
+    const insightData = await insightRes.json();
+
+    setAiInsight(insightData?.insight);
+
+  } catch (err) {
+
+    console.log(err);
+}
 
       const { value, done: doneReading } =
         await reader.read();
@@ -105,6 +125,7 @@ export default function ChatPage() {
         <ChatWindow
           messages={messages}
           loading={loading}
+          aiInsight={aiInsight}
         />
 
         {/* INPUT */}
@@ -117,6 +138,5 @@ export default function ChatPage() {
       </div>
 
     </AppShell>
-
   );
 }

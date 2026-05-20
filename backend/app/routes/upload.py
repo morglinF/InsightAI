@@ -3,7 +3,9 @@ import os
 import shutil
 import uuid
 
+from app.models.dataset import Dataset
 from app.services.file_registry import DATASETS
+from app.database import SessionLocal
 
 router = APIRouter()
 
@@ -15,27 +17,44 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 async def upload_file(file: UploadFile = File(...)):
 
     file_id = str(uuid.uuid4())
+    file_path = os.path.join(UPLOAD_DIR, file.filename)
 
-    file_extension = file.filename.split(".")[-1].lower()
+    ALLOWED_TYPES = ["csv", "pdf", "txt"]
+    
+    # detect file type
+    file_extension = file.filename.split(".")[-1]
 
-    stored_filename = f"{file_id}.{file_extension}"
-
-    file_path = os.path.join(UPLOAD_DIR, stored_filename)
+    if file_extension not in ALLOWED_TYPES:
+        return {"error": "Unsupported file type"}
 
     # save file
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    # store metadata
+    file_extension = file.filename.split(".")[-1].lower()
+
+    db = SessionLocal()
+
+    # register dataset
     DATASETS[file_id] = {
-        "file_id": file_id,
-        "original_name": file.filename,
-        "stored_name": stored_filename,
+        "file_name": file.filename,
         "file_path": file_path,
         "file_type": file_extension
     }
 
+    dataset = Dataset(
+    file_id=file_id,
+    file_path=file_path,
+    original_name=file.filename
+)
+
+    db.add(dataset)
+    db.commit()
+    db.refresh(dataset)
+
     return {
-        "message": "Upload successful",
-        "file": DATASETS[file_id]
+        "message": "File uploaded successfully",
+        "file_id": file_id,
+        "file_name": file.filename,
+        "file_type": file_extension
     }

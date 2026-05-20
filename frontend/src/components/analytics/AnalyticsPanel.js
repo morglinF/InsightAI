@@ -2,7 +2,11 @@ import MetricCard from "./MetricCard";
 import InsightCard from "./InsightCard";
 import RevenueChart from "./RevenueChart";
 
-export default function AnalyticsPanel() {
+import { useDatasets } from "../../context/DatasetContext";
+
+export default function AnalyticsPanel({ aiInsight }) {
+
+  const { activeDataset } = useDatasets();
 
   return (
     <div className="space-y-6">
@@ -30,13 +34,13 @@ export default function AnalyticsPanel() {
 
       </div>
 
-      {/* AI INSIGHT */}
+      {/* AI INSIGHT (FIXED) */}
       <InsightCard
-        text="
-          InsightAI detected strong purchasing behavior
-          during weekday mornings, with Latte sales
-          outperforming all other products by 18%.
-        "
+        text={
+          aiInsight
+            ? aiInsight
+            : "No insights yet for this dataset."
+        }
       />
 
       {/* CHART */}
