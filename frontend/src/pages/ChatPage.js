@@ -18,6 +18,7 @@ export default function ChatPage() {
   const { activeDataset } = useDatasets();
 
   const [aiInsight, setAiInsight] = useState("");
+  const [insightCardData, setInsightCardData] = useState("");
 
  const sendMessage = async () => {
 
@@ -80,6 +81,20 @@ export default function ChatPage() {
 
     console.log(err);
 }
+ try {
+
+    const insightRes = await fetch(
+      `http://localhost:8000/insights`
+    );
+
+    const insightCardData = await insightRes.json();
+
+    setInsightCardData(insightCardData[0].insight.numeric_summary.money.mean);
+
+  } catch (err) {
+
+    console.log(err);
+}
 
       const { value, done: doneReading } =
         await reader.read();
@@ -126,6 +141,8 @@ export default function ChatPage() {
           messages={messages}
           loading={loading}
           aiInsight={aiInsight}
+          insightCardData={insightCardData}
+
         />
 
         {/* INPUT */}

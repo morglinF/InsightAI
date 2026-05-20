@@ -20,18 +20,24 @@ def create_cache_key(question, insights):
     return hashlib.md5(raw.encode()).hexdigest()
 
 
-def build_prompt(question, insights):
+def build_prompt(question, context):
+
     return f"""
-You are a senior data analyst.
+    You are InsightAI,
+    an AI data assistant.
 
-Answer using ONLY the data provided.
+    Use ONLY the retrieved context below
+    to answer the user's question.
 
-Question:
-{question}
+    CONTEXT:
+    {context}
 
-Data:
-{json.dumps(insights, indent=2)}
-"""
+    QUESTION:
+    {question}
+
+    If the answer is not present in context,
+    say you do not know.
+    """
 
 
 def generate_llm_response(question, insights):

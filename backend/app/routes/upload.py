@@ -7,6 +7,8 @@ from app.models.dataset import Dataset
 from app.services.file_registry import DATASETS
 from app.database import SessionLocal
 
+from app.services.rag.ingest import ingest_csv
+
 router = APIRouter()
 
 UPLOAD_DIR = "app/data"
@@ -51,6 +53,7 @@ async def upload_file(file: UploadFile = File(...)):
     db.add(dataset)
     db.commit()
     db.refresh(dataset)
+    ingest_csv(file_path, dataset.file_id)
 
     return {
         "message": "File uploaded successfully",

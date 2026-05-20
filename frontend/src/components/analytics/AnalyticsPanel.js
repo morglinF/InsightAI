@@ -4,7 +4,7 @@ import RevenueChart from "./RevenueChart";
 
 import { useDatasets } from "../../context/DatasetContext";
 
-export default function AnalyticsPanel({ aiInsight }) {
+export default function AnalyticsPanel({ aiInsight, insightCardData }) {
 
   const { activeDataset } = useDatasets();
 
@@ -16,8 +16,9 @@ export default function AnalyticsPanel({ aiInsight }) {
 
         <MetricCard
           title="Total Revenue"
-          value="R245,000"
+          value= {insightCardData ? insightCardData :  "No insights yet for this dataset."}
           subtitle="+12.5% growth"
+          
         />
 
         <MetricCard

@@ -1,4 +1,5 @@
 import { Sparkles } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 
 export default function InsightCard({ text }) {
 
@@ -25,9 +26,9 @@ export default function InsightCard({ text }) {
 
       </div>
 
-      <p className="text-textSecondary leading-7">
-        {text}
-      </p>
+     <ReactMarkdown>
+          {text || "No insights generated yet."}
+        </ReactMarkdown>
 
     </div>
   );

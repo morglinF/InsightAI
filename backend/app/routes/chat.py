@@ -14,6 +14,8 @@ from fastapi.responses import StreamingResponse
 from app.services.llm_engine import stream_llm_response
 from app.services.insight_engine import generate_ai_insight
 
+from app.services.rag.retriever import retrieve_context
+
 router = APIRouter()
 
 
@@ -99,10 +101,14 @@ def chat_stream(request: ChatRequest):
         db.commit()
         db.refresh(dataset)
 
+        context = retrieve_context(
+            question,
+            file_id)
+
         # 7. STREAM CHAT RESPONSE
         generator = stream_llm_response(
             question,
-            insights
+            context
         )
 
         return StreamingResponse(
