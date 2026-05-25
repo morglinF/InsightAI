@@ -3,15 +3,20 @@ import TypingIndicator from "./TypingIndicator";
 import WelcomeScreen from "./WelcomeScreen";
 import AnalyticsPanel from "../analytics/AnalyticsPanel";
 
+
 export default function ChatWindow({
   messages,
   loading,
+  setInput,
+  sendMessage,
   aiInsight,
-  insightCardData
+  analyticsData
 }) {
 
   if (messages.length === 0) {
-    return <WelcomeScreen />;
+    return <WelcomeScreen 
+      setInput={setInput}   
+      sendMessage={sendMessage}/>;
   }
 
   return (
@@ -25,19 +30,21 @@ export default function ChatWindow({
     >
 
       {messages.map((msg, index) => (
-
         <MessageBubble
           key={index}
           role={msg.role}
           text={msg.text}
+          setInput={setInput}
+          sendMessage={sendMessage}
         />
 
       ))} 
 
    <div className="mt-10">
-  <AnalyticsPanel aiInsight={aiInsight}
-    insightCardData={insightCardData}
-  />
+ <AnalyticsPanel
+    aiInsight={aiInsight}
+    analyticsData={analyticsData}
+/>
 </div>
 
     </div>

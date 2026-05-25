@@ -35,8 +35,7 @@ def build_prompt(question, context):
     QUESTION:
     {question}
 
-    If the answer is not present in context,
-    say you do not know.
+    "If context is weak or incomplete, still try to provide a helpful best-effort answer using reasoning."
     """
 
 

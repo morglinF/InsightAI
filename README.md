@@ -463,7 +463,7 @@ This project demonstrates:
 Morglin Olivier
 Full Stack & AI-Focused Software Engineer
 Johannesburg, South Africa
-
+ 
 LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/morglin-olivier/)
 
 GitHub: [GitHub Profile](https://github.com/morglinF)

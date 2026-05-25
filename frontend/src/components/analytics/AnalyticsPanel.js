@@ -2,11 +2,38 @@ import MetricCard from "./MetricCard";
 import InsightCard from "./InsightCard";
 import RevenueChart from "./RevenueChart";
 
-import { useDatasets } from "../../context/DatasetContext";
+export default function AnalyticsPanel({
+  aiInsight,
+  analyticsData
+}) {
 
-export default function AnalyticsPanel({ aiInsight, insightCardData }) {
+  const revenue =
+    analyticsData?.totals?.money || 0;
 
-  const { activeDataset } = useDatasets();
+  const transactions =
+    analyticsData?.row_count || 0;
+
+  const topCategories =
+    analyticsData?.top_categories || {};
+
+  let topCategoryName = "N/A";
+
+  let topCategoryLabel = "Top Category";
+
+  const firstCategoryColumn =
+  Object.keys(topCategories)[0];
+
+  if (firstCategoryColumn) {
+
+    const categoryValues =
+      topCategories[firstCategoryColumn];
+
+    topCategoryName =
+      Object.keys(categoryValues)[0];
+
+    topCategoryLabel =
+      `Top ${firstCategoryColumn}`;
+  }
 
   return (
     <div className="space-y-6">
@@ -16,36 +43,36 @@ export default function AnalyticsPanel({ aiInsight, insightCardData }) {
 
         <MetricCard
           title="Total Revenue"
-          value= {insightCardData ? insightCardData :  "No insights yet for this dataset."}
-          subtitle="+12.5% growth"
-          
+          value={`R${revenue.toLocaleString()}`}
+          subtitle="Calculated from uploaded dataset"
         />
 
         <MetricCard
           title="Transactions"
-          value="8,492"
-          subtitle="Across all datasets"
+          value={transactions}
+          subtitle="Rows analyzed"
         />
 
         <MetricCard
-          title="Top Product"
-          value="Latte"
-          subtitle="Most purchased item"
-        />
+            title={topCategoryLabel}
+            value={topCategoryName}
+            subtitle="Most frequent value"
+          />
 
       </div>
 
-      {/* AI INSIGHT (FIXED) */}
+      {/* AI INSIGHT */}
       <InsightCard
         text={
-          aiInsight
-            ? aiInsight
-            : "No insights yet for this dataset."
+          aiInsight ||
+          "Generating AI insights..."
         }
       />
 
       {/* CHART */}
-      <RevenueChart />
+      <RevenueChart
+        analyticsData={analyticsData}
+      />
 
     </div>
   );

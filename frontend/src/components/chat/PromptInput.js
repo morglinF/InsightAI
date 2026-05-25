@@ -6,6 +6,16 @@ export default function PromptInput({
   sendMessage
 }) {
 
+  const handleKeyDown = (e) => {
+
+  if (e.key === "Enter" && !e.shiftKey) {
+
+    e.preventDefault();
+
+    sendMessage();
+  }
+};
+
   return (
     <div className="p-6">
 
@@ -41,6 +51,7 @@ export default function PromptInput({
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask your dataset anything..."
+          onKeyDown={handleKeyDown}
           rows={1}
           className="
             flex-1

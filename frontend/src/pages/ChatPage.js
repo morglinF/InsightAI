@@ -19,6 +19,7 @@ export default function ChatPage() {
 
   const [aiInsight, setAiInsight] = useState("");
   const [insightCardData, setInsightCardData] = useState("");
+  const [analyticsData, setAnalyticsData] = useState(null);
 
  const sendMessage = async () => {
 
@@ -75,7 +76,9 @@ export default function ChatPage() {
 
     const insightData = await insightRes.json();
 
-    setAiInsight(insightData?.insight);
+    setAiInsight(insightData?.ai_insight);
+    setAnalyticsData(insightData?.analytics);
+    setInput("");
 
   } catch (err) {
 
@@ -140,8 +143,10 @@ export default function ChatPage() {
         <ChatWindow
           messages={messages}
           loading={loading}
+          setInput={setInput}
+          sendMessage={sendMessage}
           aiInsight={aiInsight}
-          insightCardData={insightCardData}
+          analyticsData={analyticsData}
 
         />
 

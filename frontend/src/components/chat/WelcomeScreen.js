@@ -1,14 +1,18 @@
 import { motion } from "framer-motion";
 
-const suggestions = [
-  "Analyze revenue trends",
-  "Find anomalies in this dataset",
-  "Summarize customer behavior",
-  "What patterns exist?",
+const prompts = [
+  "What patterns exist in this dataset?",
+  "Summarize this dataset",
+  "What anomalies can you detect?",
+  "Which categories perform best?"
 ];
 
-export default function WelcomeScreen() {
-
+export default function WelcomeScreen({
+  setInput,
+  sendMessage
+  })
+  
+  {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -32,36 +36,39 @@ export default function WelcomeScreen() {
   Upload a CSV dataset to begin AI analysis.
 </p>
 
-      {/* SUGGESTIONS */}
-      <div className="grid grid-cols-2 gap-4 max-w-3xl w-full">
+      {/* PROMPTS */}
+      <div className="grid grid-cols-2 gap-4 mt-10">
 
-        {suggestions.map((item, index) => (
+  {prompts.map((prompt) => (
 
-          <motion.div
-            key={index}
-            whileHover={{ scale: 1.03 }}
-            className="
-              bg-surface/70
-              backdrop-blur-xl
-              border
-              border-border
-              rounded-2xl
-              p-5
-              cursor-pointer
-              hover:border-primary
-              transition-all
-            "
-          >
-            <p className="text-sm">
-              {item}
-            </p>
+    <button
+      key={prompt}
+      onClick={() => {
+        setInput(prompt);
 
-          </motion.div>
+        setTimeout(() => {
+          sendMessage(prompt);
+        }, 100);
+      }}
+      className="
+        bg-[#111827]
+        hover:bg-[#1f2937]
+        border border-white/10
+        rounded-2xl
+        p-5
+        text-left
+        transition
+        text-white
+      "
+    >
 
-        ))}
+      {prompt}
+
+    </button>
+
+  ))}
 
       </div>
-
     </motion.div>
   );
 }

@@ -7,41 +7,73 @@ from openai import OpenAI
 import hashlib
 import json
 
+from pandas.api.types import (
+    is_object_dtype,
+    is_string_dtype
+)
+
 client = OpenAI()
 
 
-def generate_basic_insights(df: pd.DataFrame):
+def clean_value(value):
+
+    if isinstance(value, (np.integer,)):
+        return int(value)
+
+    if isinstance(value, (np.floating,)):
+        return float(value)
+
+    return value
+
+
+def generate_basic_insights(df):
+
     insights = {}
 
-    # numeric columns only
-    numeric_cols = df.select_dtypes(include=['number']).columns
-
-    # categorical columns
-    categorical_cols = df.select_dtypes(include=['object']).columns
-
-    # basic stats
+    # dataset overview
     insights["row_count"] = len(df)
-    insights["columns"] = list(df.columns)
+    insights["column_count"] = len(df.columns)
 
-    # numeric summaries
-    insights["numeric_summary"] = {}
+    # numeric analysis
+    numeric_cols = df.select_dtypes(include=["number"]).columns
+
+    insights["totals"] = {}
+    insights["averages"] = {}
 
     for col in numeric_cols:
-        insights["numeric_summary"][col] = {
-            "sum": df[col].sum(),
-            "mean": df[col].mean(),
-            "max": df[col].max(),
-            "min": df[col].min()
-        }
 
-    # top categories
-    insights["categorical_summary"] = {}
+        insights["totals"][col] = clean_value(df[col].sum())
 
-    for col in categorical_cols:
-        insights["categorical_summary"][col] = df[col].value_counts().head(5).to_dict()
+        insights["averages"][col] = clean_value(
+            round(df[col].mean(), 2)
+        )
 
-    return clean_for_json(insights )
+    # categorical analysis
+    insights["top_categories"] = {}
 
+    for col in df.columns:
+
+        if ( is_object_dtype(df[col]) or is_string_dtype(df[col])):
+
+            top_values = (
+                df[col]
+                .value_counts()
+                .head(5)
+                .to_dict()
+            )
+
+            insights["top_categories"][col] = {
+                str(k): clean_value(v)
+                for k, v in top_values.items()
+            }
+
+    # missing values
+    insights["missing_values"] = {
+        col: int(df[col].isna().sum())
+        for col in df.columns
+    }
+
+    return insights
 
 
 def clean_for_json(obj):

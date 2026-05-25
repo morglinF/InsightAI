@@ -2,6 +2,7 @@ from fastapi import APIRouter, UploadFile, File
 import os
 import shutil
 import uuid
+from pathlib import Path
 
 from app.models.dataset import Dataset
 from app.services.file_registry import DATASETS

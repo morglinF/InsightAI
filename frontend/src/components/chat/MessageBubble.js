@@ -1,43 +1,48 @@
-import { motion } from "framer-motion";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
-export default function MessageBubble({ role, text }) {
+export default function MessageBubble({
+  role,
+  text,
+  setInput,
+  sendMessage
+}) {
 
-  const isUser = role === "user";
+  const isAI = role === "ai";
 
   return (
-
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
+    <div
       className={`
-        flex
-        mb-6
-        ${isUser ? "justify-end" : "justify-start"}
+        mb-6 flex
+        ${isAI ? "justify-start" : "justify-end"}
       `}
     >
 
       <div
         className={`
           max-w-3xl
+          rounded-2xl
           px-5
           py-4
-          rounded-3xl
-          shadow-lg
           whitespace-pre-wrap
-          leading-7
-
           ${
-            isUser
-              ? "bg-primary text-white"
-              : "bg-surface border border-border"
+            isAI
+              ? "bg-[#111827] text-white"
+              : "bg-blue-600 text-white"
           }
         `}
       >
 
-        {text}
+        <div className="prose prose-invert max-w-none">
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+          >
+            {text}
+          </ReactMarkdown>
+        </div>
 
       </div>
 
-    </motion.div>
+    </div>
   );
 }

@@ -105,6 +105,10 @@ def chat_stream(request: ChatRequest):
             question,
             file_id)
 
+
+        print("QUESTION:", question , flush = True)
+        print("CONTEXT:", context, flush = True)
+
         # 7. STREAM CHAT RESPONSE
         generator = stream_llm_response(
             question,
@@ -132,14 +136,18 @@ def latest_insight(file_id: str):
         Dataset.file_id == file_id
     ).first()
 
-    if not dataset:
-        return {
-            "insight": None
-        }
+    latest_insight = (
+        db.query(Insight)
+        .filter(Insight.file_id == file_id)
+        .order_by(Insight.created_at.desc())
+        .first()
+    )
 
     return {
-        "insight": dataset.latest_ai_insight
-    }        
+        "ai_insight": dataset.latest_ai_insight if dataset else None,
+        "analytics": json.loads(latest_insight.insight)
+        if latest_insight else None
+    }
 
 @router.get("/insights")
 def get_insights(file_id: str = None):
