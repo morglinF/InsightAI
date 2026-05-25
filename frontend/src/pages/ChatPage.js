@@ -7,6 +7,8 @@ import PromptInput from "../components/chat/PromptInput";
 import { useDatasets } from "../context/DatasetContext";
 import { toast } from 'react-hot-toast';
 
+import api from '../api/client'
+
 export default function ChatPage() {
 
   const [messages, setMessages] = useState([]);
@@ -20,6 +22,9 @@ export default function ChatPage() {
   const [aiInsight, setAiInsight] = useState("");
   const [insightCardData, setInsightCardData] = useState("");
   const [analyticsData, setAnalyticsData] = useState(null);
+
+
+
 
  const sendMessage = async () => {
 
@@ -45,19 +50,16 @@ export default function ChatPage() {
 
   try {
 
-    const response = await fetch(
-      "http://localhost:8000/chat-stream",
+    const response = await api.post(`/chat-stream`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           file_id: activeDataset?.file_id,
           question: input,
         }),
       }
     );
+    
     
 
     const reader = response.body.getReader();
@@ -70,8 +72,8 @@ export default function ChatPage() {
 
       try {
 
-    const insightRes = await fetch(
-      `http://localhost:8000/latest-insight/${activeDataset.file_id}`
+    const insightRes = await api.get(
+      `latest-insight/${activeDataset.file_id}`
     );
 
     const insightData = await insightRes.json();
@@ -87,7 +89,7 @@ export default function ChatPage() {
  try {
 
     const insightRes = await fetch(
-      `http://localhost:8000/insights`
+      `${api}//insights`
     );
 
     const insightCardData = await insightRes.json();
