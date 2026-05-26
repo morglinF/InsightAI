@@ -34,7 +34,6 @@ export default function Sidebar() {
       
       const res = await api.post("/upload",
         formData
-  }
 );
 
 
