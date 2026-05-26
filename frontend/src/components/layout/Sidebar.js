@@ -5,6 +5,8 @@ import {
 } from "lucide-react";
 
 import toast from "react-hot-toast";
+import api from "../../api/client";
+
 
 import { useDatasets } from "../../context/DatasetContext";
 
@@ -29,16 +31,18 @@ export default function Sidebar() {
       toast.loading("Uploading dataset...", {
         id: "upload",
       });
-
-      const res= await fetch(
-      `${process.env.REACT_APP_API_URL}/upload`,
+      
+      const res = await api.post("/upload",
+        formData,
         {
-          method: "POST",
-          body: formData,
-        }
-      );
+          headers: {
+            "Content-Type": "multipart/form-data",
+    },
+  }
+);
 
-      const uploadedDataset = await res.json();
+
+      const uploadedDataset = res.data;
 
       setDatasets((prev) => [
         ...prev.filter(Boolean),

@@ -25,13 +25,13 @@ export default function ChatPage() {
 
 
 
- const sendMessage = async () => {
+ const sendMessage = async (question) => {
 
-  if (!input || !activeDataset) return;
+  if (!question || !activeDataset) return;
 
   const userMessage = {
     role: "user",
-    text: input,
+    text: question,
   };
 
   setMessages((prev) => [...prev, userMessage]);
@@ -57,7 +57,7 @@ export default function ChatPage() {
         },
         body: JSON.stringify({
           file_id: activeDataset?.file_id,
-          question: input,
+          question,
         }),
       }
     );

@@ -6,15 +6,19 @@ export default function PromptInput({
   sendMessage
 }) {
 
+  const handleSend = async () => {
+    const question = input.trim();
+    if (!question) return;
+    setInput("");
+    await sendMessage(question);
+  };
+
   const handleKeyDown = (e) => {
-
-  if (e.key === "Enter" && !e.shiftKey) {
-
-    e.preventDefault();
-
-    sendMessage();
-  }
-};
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
 
   return (
     <div className="p-6">
@@ -65,7 +69,7 @@ export default function PromptInput({
 
         {/* SEND */}
         <button
-          onClick={sendMessage}
+          onClick={handleSend}
           className="
             bg-primary
             hover:bg-purple-700
