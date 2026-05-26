@@ -4,7 +4,7 @@ import RevenueChart from "./RevenueChart";
 
 export default function AnalyticsPanel({
   aiInsight,
-  analyticsData
+  analyticsData 
 }) {
 
   const revenue =

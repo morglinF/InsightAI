@@ -1,7 +1,7 @@
 import MessageBubble from "./MessageBubble";
-import TypingIndicator from "./TypingIndicator";
 import WelcomeScreen from "./WelcomeScreen";
 import AnalyticsPanel from "../analytics/AnalyticsPanel";
+import TypingIndicator from "./TypingIndicator";
 
 
 export default function ChatWindow({
@@ -10,7 +10,8 @@ export default function ChatWindow({
   setInput,
   sendMessage,
   aiInsight,
-  analyticsData
+  analyticsData,
+  insightCardData
 }) {
 
   if (messages.length === 0) {
@@ -37,8 +38,8 @@ export default function ChatWindow({
           setInput={setInput}
           sendMessage={sendMessage}
         />
-
-      ))} 
+))} 
+{loading && <TypingIndicator />}
 
    <div className="mt-10">
  <AnalyticsPanel
