@@ -123,11 +123,9 @@ def chat_stream(request: ChatRequest):
         try:
             db.close()
         except Exception:
-            pass
-     except Exception as e:
-        print("CHAT STREAM ERROR:", repr(e))
-        return {"error": str(e)}
-
+            print("CHAT STREAM ERROR:", repr(e))
+            return {"error": str(e)}
+            
 @router.get("/latest-insight/{file_id}")
 def latest_insight(file_id: str):
 
