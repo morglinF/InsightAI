@@ -20,7 +20,7 @@ export default function TypingIndicator() {
       <div className="w-2 h-2 bg-primary rounded-full animate-bounce delay-200" />
 
       <span className="text-sm text-textSecondary ml-2">
-        AI is analyzing your dataset...
+        Analyzing your dataset...
       </span>
 
     </div>
