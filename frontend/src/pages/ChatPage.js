@@ -29,6 +29,8 @@ export default function ChatPage() {
 
   if (!question || !activeDataset) return;
 
+  setInput("");
+
   const userMessage = {
     role: "user",
     text: question,
@@ -145,6 +147,7 @@ export default function ChatPage() {
           input={input}
           setInput={setInput}
           sendMessage={sendMessage}
+          isSendDisabled={!activeDataset}
         />
 
       </div>

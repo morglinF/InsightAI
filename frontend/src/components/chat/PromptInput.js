@@ -3,10 +3,12 @@ import { SendHorizonal, Paperclip } from "lucide-react";
 export default function PromptInput({
   input,
   setInput,
-  sendMessage
+  sendMessage,
+  isSendDisabled = false,
 }) {
 
   const handleSend = async () => {
+    if (isSendDisabled) return;
     const question = input.trim();
     if (!question) return;
     setInput("");
@@ -69,15 +71,18 @@ export default function PromptInput({
 
         {/* SEND */}
         <button
+          type="button"
           onClick={handleSend}
-          className="
-            bg-primary
-            hover:bg-purple-700
-            transition-all
+          disabled={isSendDisabled}
+          title={isSendDisabled ? "Upload dataset first" : "Send message"}
+          className={
+            `
             rounded-2xl
             p-3
-            shadow-glow
-          "
+            transition-all
+            ${isSendDisabled ? "bg-slate-700 cursor-not-allowed opacity-50" : "bg-primary hover:bg-purple-700 shadow-glow"}
+          `
+          }
         >
           <SendHorizonal size={20} />
         </button>
