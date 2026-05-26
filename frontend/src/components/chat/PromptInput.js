@@ -76,8 +76,7 @@ export default function PromptInput({
           disabled={isSendDisabled}
           title={isSendDisabled ? "Upload dataset first" : "Send message"}
           className={
-            `
-            rounded-2xl
+            `rounded-2xl
             p-3
             transition-all
             ${isSendDisabled ? "bg-slate-700 cursor-not-allowed opacity-50" : "bg-primary hover:bg-purple-700 shadow-glow"}
