@@ -33,11 +33,7 @@ export default function Sidebar() {
       });
       
       const res = await api.post("/upload",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-    },
+        formData
   }
 );
 
