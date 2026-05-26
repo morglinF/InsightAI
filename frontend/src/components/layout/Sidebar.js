@@ -33,7 +33,7 @@ export default function Sidebar() {
       });
       
       
-const response = await api.post(
+const res = await api.post(
   "/upload",
   formData,
   {
