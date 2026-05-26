@@ -33,11 +33,11 @@ export default function Sidebar() {
       });
       
       
-const res = await api.fetch(
+const res = await api.post(
   `${process.env.REACT_APP_API_URL} "/upload"`,
   formData,
   {
-    method: "POST",
+        method: "POST",
     headers: {
       "Content-Type": "multipart/form-data",
     },
