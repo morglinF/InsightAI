@@ -6,8 +6,6 @@ import {
 
 import toast from "react-hot-toast";
 
-import api from "../../api/client";
-
 import { useDatasets } from "../../context/DatasetContext";
 
 export default function Sidebar() {
@@ -32,17 +30,15 @@ export default function Sidebar() {
         id: "upload",
       });
 
-      const res = await api.post(
-        "/upload",
-        formData,
+      const res= await fetch(
+      `${process.env.REACT_APP_API_URL}/upload`,
         {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+          method: "POST",
+          body: formData,
         }
       );
 
-      const uploadedDataset = res.data;
+      const uploadedDataset = await res.json();
 
       setDatasets((prev) => [
         ...prev.filter(Boolean),
