@@ -31,11 +31,8 @@ export default function Sidebar() {
       toast.loading("Uploading dataset...", {
         id: "upload",
       });
-      
-      
-import api from "../../api/client";
 
-const resp = await api.post(
+const res = await api.post(
   "/upload",
   formData,
   {
@@ -44,10 +41,6 @@ const resp = await api.post(
     },
   }
 );
-
-const data = response.data;
-
-
       const uploadedDataset = res.data;
 
       setDatasets((prev) => [
